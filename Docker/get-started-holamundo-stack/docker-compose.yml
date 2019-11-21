@@ -2,7 +2,7 @@ version: "3"
 services:
   web:
     # replace username/repo:tag with your name and image details
-    image: jdiazfernandez/get-started:holamundopart2
+    image: jdiazfernandez/holamundo
     deploy:
       replicas: 5
       restart_policy:
@@ -27,16 +27,14 @@ services:
     networks:
       - webnet
   redis:
-    image: redis
-    ports:
-      - "6379:6379"
-    volumes:
-      - "/home/docker/data:/data"
-    deploy:
-      placement:
-        constraints: [node.role == manager]
-    command: redis-server --appendonly yes
+    image: redis:4.0.5-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    hostname: redis
     networks:
       - webnet
+    volumes:
+      - redis-data:/data
 networks:
   webnet:
+volumes:
+  redis-data:
